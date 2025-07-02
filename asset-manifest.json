@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/VolleyStat/static/js/main.25b79b7c.js",
+    "index.html": "/VolleyStat/index.html",
+    "main.25b79b7c.js.map": "/VolleyStat/static/js/main.25b79b7c.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.25b79b7c.js"
+  ]
+}
