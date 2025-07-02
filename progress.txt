@@ -1,9 +1,11 @@
 01/07/2025 
-Bought domain 'volleystat.app', connected to github repo. Have a basic Hellow World website
+Bought domain 'volleystat.app', connected to github repo. Have a basic Hellow World .html website 
 
 02/07/2025
 Goal: 
 - set up cloudflare DNS redirect instead of being handled by namecheap to improve mobile redirect. (Cloudflare handles it much better)
-- Installed 'node' to set up React in my project
+- Initialised React and Supabase, and set up basic login website structure
+
+
 - Drop video file into app
 - Able to make an account. 
