@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.js": "/VolleyStat/static/js/main.35beec88.js",
-    "index.html": "/VolleyStat/index.html",
-    "main.35beec88.js.map": "/VolleyStat/static/js/main.35beec88.js.map"
+    "main.js": "/static/js/main.35beec88.js",
+    "index.html": "/index.html",
+    "main.35beec88.js.map": "/static/js/main.35beec88.js.map"
   },
   "entrypoints": [
     "static/js/main.35beec88.js"
