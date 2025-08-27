@@ -285,54 +285,47 @@ export default function TeamPage({ team, user, onBack }) {
         }}
       >
 
-
-      {videos.map((v) => {
-        const libraryId = process.env.NEXT_PUBLIC_BUNNY_LIBRARY_ID;
-        const embed = `https://iframe.mediadelivery.net/embed/${libraryId}/${v.guid}?autoplay=false`;
-
-        return (
-          <div key={v.guid} style={{ border: '1px solid #ddd', borderRadius: 8, overflow: 'hidden' }}>
-            {/* You can keep your <img> (may be black until Bunny finishes processing) */}
-            <div style={{ padding: 8 }}>
-              <div style={{ fontSize: 14, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                {v.title || '(untitled)'}
-              </div>
-              <div style={{ fontSize: 12, color: '#666', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {v.guid}
-              </div>
-
-              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-                <button
-                  onClick={() => setOpenVideo(openVideo === v.guid ? null : v.guid)}
-                  style={{ fontSize: 12, textDecoration: 'underline' }}
-                >
-                  {openVideo === v.guid ? 'Close' : 'Play'}
-                </button>
-                <button
-                  onClick={() => deleteVideo(v.guid)}
-                  style={{ marginLeft: 'auto', fontSize: 12, color: '#c00', textDecoration: 'underline' }}
-                >
-                  Delete
-                </button>
-              </div>
-
-              {openVideo === v.guid && (
-                <div style={{ marginTop: 8, position: 'relative', paddingTop: '56.25%' }}>
-                  <iframe
-                    src={embed}
-                    loading="lazy"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
-                    title={v.title || v.guid}
-                  />
-                </div>
-              )}
+      {videos.map((v) => (
+        <div key={v.guid} style={{ border: '1px solid #ddd', borderRadius: 8, overflow: 'hidden' }}>
+          <div style={{ padding: 8 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {v.title || '(untitled)'}
             </div>
+            <div style={{ fontSize: 12, color: '#666', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {v.guid}
+            </div>
+      
+            <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+              <button
+                onClick={() => setOpenVideo(openVideo === v.guid ? null : v.guid)}
+                style={{ fontSize: 12, textDecoration: 'underline' }}
+              >
+                {openVideo === v.guid ? 'Close' : 'Play'}
+              </button>
+              <button
+                onClick={() => deleteVideo(v.guid)}
+                style={{ marginLeft: 'auto', fontSize: 12, color: '#c00', textDecoration: 'underline' }}
+              >
+                Delete
+              </button>
+            </div>
+      
+            {openVideo === v.guid && (
+              <div style={{ marginTop: 8, position: 'relative', paddingTop: '56.25%' }}>
+                <iframe
+                  src={v.embedUrl}
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
+                  title={v.title || v.guid}
+                />
+              </div>
+            )}
           </div>
-        );
-      })}
+        </div>
+      ))}
     </div>  
-  </div>
-  );        
-}          
+  </div> 
+);        
+}

@@ -6,7 +6,7 @@ export default async function handler(req, res) {
 
   const libraryId = process.env.BUNNY_LIBRARY_ID;
   const apiKey = process.env.BUNNY_API_KEY;
-  const cdn = process.env.NEXT_PUBLIC_BUNNY_STREAM_CDN;
+  const cdn = process.env.BUNNY_STREAM_CDN;
   const tokenKey = process.env.BUNNY_STREAM_TOKEN_KEY;
 
   const page = Number(req.query.page ?? 1);
@@ -26,19 +26,20 @@ export default async function handler(req, res) {
   function sign(path) {
     // Token = sha256(tokenKey + path + expires)
     const token = crypto
-      .createHash("sha256")
-      .update(tokenKey + path + expires)
+      .createHmac("sha256", tokenKey)
+      .update(path + expires)
       .digest("hex");
     return `${cdn}${path}?token=${token}&expires=${expires}`;
   }
 
   const items = (data.items || []).map((v) => {
-    const pathThumb = `/${v.guid}/thumbnail.jpg`;
-    const pathHls   = `/${v.guid}/playlist.m3u8`;
+    const pathThumb = `/${libraryId}/${v.guid}/thumbnail.jpg`;
+    const pathHls   = `/${libraryId}/${v.guid}/playlist.m3u8`;
     return {
       ...v,
       signedThumb: sign(pathThumb),
       signedHls: sign(pathHls),
+      embedUrl: `https://iframe.mediadelivery.net/embed/${libraryId}/${v.guid}?autoplay=false`
     };
   });
 
