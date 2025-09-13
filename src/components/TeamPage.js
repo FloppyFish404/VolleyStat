@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import * as tus from 'tus-js-client';
+import Hls from 'hls.js';
 
 export default function TeamPage({ team, user, onBack }) {
   const [videoFile, setVideoFile] = useState(null);
@@ -190,6 +191,43 @@ export default function TeamPage({ team, user, onBack }) {
     }
   }
 
+  function VideoPlayer({ hlsUrl, poster, ...props }) {
+    const ref = useRef(null);
+  
+    useEffect(() => {
+      const video = ref.current;
+      if (!video || !hlsUrl) return;
+  
+      // Safari/iOS: native HLS support
+      if (video.canPlayType('application/vnd.apple.mpegURL')) {
+        video.src = hlsUrl;
+        return;
+      }
+  
+      // Other browsers: use Hls.js
+      if (Hls.isSupported()) {
+        const hls = new Hls({ lowLatencyMode: true });
+        hls.loadSource(hlsUrl);
+        hls.attachMedia(video);
+        return () => hls.destroy();
+      }
+  
+      // Fallback (rare)
+      video.src = hlsUrl;
+    }, [hlsUrl]);
+  
+    return (
+      <video
+        ref={ref}
+        controls
+        playsInline
+        poster={poster}
+        style={{ width: '100%' }}
+        {...props}
+      />
+    );
+  }  
+
   const suggested = teamMembers
     .filter((m) =>
       m.profiles.email.toLowerCase().includes(memberEmail.toLowerCase())
@@ -309,17 +347,9 @@ export default function TeamPage({ team, user, onBack }) {
                 Delete
               </button>
             </div>
-      
             {openVideo === v.guid && (
-              <div style={{ marginTop: 8, position: 'relative', paddingTop: '56.25%' }}>
-                <iframe
-                  src={v.embedUrl}
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
-                  title={v.title || v.guid}
-                />
+              <div style={{ marginTop: 8 }}>
+                <VideoPlayer hlsUrl={v.signedHls} poster={v.signedThumb} />
               </div>
             )}
           </div>
